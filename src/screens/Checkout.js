@@ -1,16 +1,50 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, {Component} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput} from 'react-native';
 import Fa5Icon from 'react-native-vector-icons/FontAwesome5';
 import { Radio, NativeBaseProvider } from 'native-base';
-import Button from '../components/Button';
+import { connect } from 'react-redux';
+import { getProfile } from '../redux/actions/profile';
+import ButtonAction from '../components/ButtonAction';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
-export default function Checkout({navigation}) {
+class  Checkout extends Component{
+  constructor(props) {
+    super(props);
+    this.state =  {img: null, name: '', email: '', phoneNumber: '', address : '' };
+  }
+  async componentDidMount(){
+    const {token} = this.props.auth;
+    await this.props.getProfile(token);
+    // await this.props.getHistoryProducts(token);
+    const {user} = this.props.profile?.data;
+    this.setState({email: user[0].email});
+    this.setState({name: user[0].name});
+    this.setState({img: user[0].img});
+    this.setState({phoneNumber: user[0].phoneNumber});
+    this.setState({address: user[0].address});
+    console.log('ini email setstate', this.state);
+  }
+  onPayment = () => {
+    const {user} = this.props.profile?.data;
+    console.log(user[0].address);
+    if (user[0].address !== null){
+      this.props.navigation.navigate('payment');
+    } else {
+      showMessage({
+        message: 'Must add your address to complete Payment',
+        type: 'default',
+        backgroundColor: 'red',
+        color: 'white',
+      });
+    }
+  }
+    render(){
     return (
       <NativeBaseProvider>
       <View style={styles.parent}>
           <View style={styles.stepPayment}>
-              <TouchableOpacity onPress={() => navigation.navigate('cart') }  style={styles.dot}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('cart') }  style={styles.dot}>
               <Fa5Icon name="dot-circle" size={35} color={'#9F9F9F'} />
               <Text>  Order  </Text>
               </TouchableOpacity>
@@ -18,7 +52,7 @@ export default function Checkout({navigation}) {
               <Fa5Icon name="dot-circle" size={35} color={'#6A4029'} />
               <Text>Checkout</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.dot} onPress={()=> navigation.navigate('payment')}>
+              <TouchableOpacity style={styles.dot} onPress={()=> this.props.navigation.navigate('payment')}>
               <Fa5Icon name="dot-circle" size={35} color={'#9F9F9F'} />
               <Text> Payment</Text>
               </TouchableOpacity>
@@ -35,16 +69,9 @@ export default function Checkout({navigation}) {
           </TouchableOpacity>
         </View>
         <View style={styles.address}>
-          <View >
-          <TextInput style={styles.BoxText}
-             placeholder="Iskandar Street"
-             underlineColorAndroid="transparent"
-             editable={false}
-             selectTextOnFocus={false}/>
-          </View>
           <View>
           <TextInput style={styles.BoxTextArea}
-             placeholder="Km 5 refinery road oppsite republic road, effurun, Jakarta"
+             placeholder={this.state.address}
              underlineColorAndroid="transparent"
              multiline = {true}
             numberOfLines = {3}
@@ -55,6 +82,7 @@ export default function Checkout({navigation}) {
           <TextInput style={styles.BoxText}
              placeholder="+62 81348287878"
              underlineColorAndroid="transparent"
+             multiline={true}
              editable={false}
              selectTextOnFocus={false}/>
           </View>
@@ -85,12 +113,13 @@ export default function Checkout({navigation}) {
             <Text style={styles.addressDetail}>IDR 50.000</Text>
           </TouchableOpacity>
         </View>
-          <Button buttonName="Proceed to payment" routeName="payment" />
+          <ButtonAction buttonName="Proceed to payment" action={this.onPayment} />
         </View>
         </ScrollView>
       </View>
       </NativeBaseProvider>
     );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -129,7 +158,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     address: {
-      height: 160,
+      flex: 1,
       width: 280,
       elevation: 3,
       backgroundColor: 'white',
@@ -176,3 +205,9 @@ const styles = StyleSheet.create({
       paddingBottom: 50,
     },
 });
+const mapStateToProps = state => ({
+  profile : state.profile,
+  auth: state.auth,
+});
+const mapDispatchToProps = {getProfile};
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout);

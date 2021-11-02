@@ -1,29 +1,22 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {Text, View, Image, StyleSheet} from 'react-native';
+import Button from '../components/Button';
 import ButtonYellow from '../components/ButtonYellow';
-import {connect} from 'react-redux';
 
-class Welcome extends Component {
-
-  async componentDidMount () {
-    const {token} = this.props?.auth;
-    if (typeof token === 'string'){
-      console.log(typeof token === 'string');
-      this.props.navigation.navigate('home');
-    } else {
-      console.log(typeof token === 'string');
-    }
-  }
+export default class SignOrLogin extends Component {
   render() {
     return (
       <View style={styles.parent}>
-        <Image style={styles.banner} source={require('../assets/banner.png')} />
+        <Image style={styles.banner} source={require('../assets/bannerLoginSignUp.png')} />
         <View style={styles.child}/>
         <View style={styles.title}>
-            <Text style={styles.titleText}>Coffee for Everyone</Text>
+            <Text style={styles.titleText}>Welcome</Text>
             <View style={styles.button} >
-                <ButtonYellow buttonName="Get Started" routeName="signorlogin" />
+                <Button buttonName="Create New Account" routeName="signup"/>
+            </View>
+            <View style={styles.button2} >
+                <ButtonYellow buttonName="Login" routeName="login"/>
             </View>
         </View>
       </View>
@@ -48,8 +41,7 @@ const styles = StyleSheet.create({
   },
   title: {
     position: 'absolute',
-    marginTop: 160,
-
+    marginTop: 90,
   },
   titleText: {
       fontSize: 58,
@@ -59,10 +51,12 @@ const styles = StyleSheet.create({
   },
   button: {
       position: 'absolute',
-      marginTop: 360,
+      marginTop: 325,
+      marginLeft: -20,
   },
+  button2: {
+    position: 'absolute',
+    marginTop: 400,
+    marginLeft: -20,
+},
 });
-const mapStateToProps = state => ({
-    auth: state.auth,
-  });
-export default connect(mapStateToProps, null)(Welcome);

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import HomePage from './src/screens/HomePage';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Home from './src/screens/HomePage';
 import ProductDetail from './src/screens/ProductDetail';
 import Cart from './src/screens/Cart';
 import Headers from './src/components/Headers';
@@ -17,19 +18,98 @@ import Security from './src/screens/Security';
 import DrawerContent from './src/components/DrawerContent';
 import Profile from './src/screens/Profile';
 import Favorite from './src/screens/Favorite';
+import Promo from './src/screens/Promo';
+import Welcome from './src/screens/Welcome';
+import SignOrLogin from './src/screens/SignOrLogin';
+import Login from './src/screens/Login';
+import SignUp from './src/screens/SignUp';
+import FlashMessage from 'react-native-flash-message';
+import Search from './src/screens/Search';
+import HeadersHome from './src/components/HeadersHome';
+import ChatList from './src/screens/ChatList';
+import ChatRoom from './src/screens/ChatRoom';
+import OrderHistory from './src/screens/OrderHistory';
+import Coffee from './src/screens/Coffee';
+
+import FAIcons from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import NonCoffee from './src/screens/NonCoffee';
+import Foods from './src/screens/Foods';
+import Addon from './src/screens/Addon';
+import {postPayment} from './src/redux/actions/payment';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+
+const BottomTab = () => {
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#6A4029',
+        inactiveTintColor: 'grey',
+        labelStyle: {
+          fontSize: 15,
+          fontWeight: 'bold',
+        },
+        tabBarStyle: {height: 70, paddingBottom: 8},
+      }}>
+      <Tab.Screen
+        name="Homescreen"
+        component={Home}
+        options={{
+          title: null,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name="home" color={color} size={25} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Searching"
+        component={Search}
+        options={{
+          title: null,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+          tabBarLabel: 'Search',
+          tabBarIcon: ({color, size}) => (
+            <Ionicons name="search" color={color} size={25} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="user"
+        component={Profile}
+        options={{
+          title: null,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({color, size}) => (
+            <FAIcons name="user-circle-o" color={color} size={25} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 class MainStack extends Component {
   render() {
     return (
       <NativeBaseProvider>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="welcome">
           <Stack.Screen
-            component={HomePage}
+            component={BottomTab}
             name="home"
-            options={{title: 'Dasboard'}}
+            options={{
+              header: HeadersHome,
+              // cardStyle: {backgroundColor: 'transparent'},
+              // headerTransparent: true,
+            }}
           />
           <Stack.Screen
             component={ProductDetail}
@@ -44,8 +124,6 @@ class MainStack extends Component {
             component={Cart}
             options={{
               header: Headers,
-              cardStyle: {backgroundColor: 'transparent'},
-              headerTransparent: true,
             }}
             name="cart"
           />
@@ -77,13 +155,13 @@ class MainStack extends Component {
             name="history"
           />
           <Stack.Screen
-            component={Profile}
             options={{
               header: Headers,
               cardStyle: {backgroundColor: 'transparent'},
               headerTransparent: true,
             }}
             name="profile"
+            component={Profile}
           />
           <Stack.Screen
             options={{
@@ -91,14 +169,165 @@ class MainStack extends Component {
               cardStyle: {backgroundColor: 'transparent'},
               headerTransparent: true,
             }}
-            name="favorite"
+            name="Favorite"
             component={Favorite}
           />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="Coffee"
+            component={Coffee}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="Non Coffee"
+            component={NonCoffee}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="Foods"
+            component={Foods}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="Adds-on"
+            component={Addon}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="orderhistory"
+            component={OrderHistory}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="search"
+            component={Search}
+          />
+
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="Promo"
+            component={Promo}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="welcome"
+            component={Welcome}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="signorlogin"
+            component={SignOrLogin}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="login"
+            component={Login}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="chatlist"
+            component={ChatList}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="chatroom"
+            component={ChatRoom}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
+            name="signup"
+            component={SignUp}
+          />
         </Stack.Navigator>
+        <FlashMessage position="top" />
       </NativeBaseProvider>
     );
   }
 }
+
+const OrderStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          header: Headers,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+        name="order"
+        component={Cart}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const EditProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          header: Headers,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+        name="editProfile"
+        component={EditProfile}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const App = () => {
   return (
@@ -125,18 +354,15 @@ const App = () => {
             headerTransparent: true,
             title: 'Edit Profile',
           }}
-          name="editProfile"
-          component={EditProfile}
+          name="editprofilestack"
+          component={EditProfileStack}
         />
         <Drawer.Screen
           options={{
-            header: Headers,
-            cardStyle: {backgroundColor: 'transparent'},
-            headerTransparent: true,
             title: 'Orders',
           }}
-          name="order"
-          component={Cart}
+          name="orderstack"
+          component={OrderStack}
         />
         <Drawer.Screen
           options={{title: 'All Menu'}}
@@ -150,8 +376,8 @@ const App = () => {
         />
         <Drawer.Screen
           options={{title: 'Security'}}
-          name="security"
-          component={Security}
+          name="welcome"
+          component={Welcome}
         />
       </Drawer.Navigator>
     </NavigationContainer>

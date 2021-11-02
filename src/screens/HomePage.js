@@ -1,52 +1,101 @@
 /* eslint-disable prettier/prettier */
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import React, { Component } from 'react';
+import {View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
+import {SearchBar } from 'react-native-elements';
 import {Input, NativeBaseProvider} from 'native-base';
+import {Picker} from '@react-native-community/picker';
+import {connect} from 'react-redux';
+import { getProducts } from '../redux/actions/products';
+import { searchProducts } from '../redux/actions/products';
+import { getCategories } from '../redux/actions/products';
 
-export default class HomePage extends Component {
+class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.state =  {category: ['Favorit', 'Promo','Coffee', 'Non Coffee', 'Food', 'Add-on']};
+    this.state =  {
+      category: [{name :'Favorite', id: 5},{name : 'Promo', id: 6}, {name : 'Coffee', id: 1}, {name : 'Non Coffee', id: 2}, {name : 'Food', id: 3}, {name : 'Add-on', id: 4}],
+      search: '',
+      sort: '',
+    };
+  }
+  componentDidMount(){
+    console.log('ini didmount');
+    const {token} = this.props.auth;
+    if (token === null){
+      this.props.navigation.navigate('welcome');
+    }
+    this.props.getProducts();
+    this.props.getCategories();
+  }
+
+  onSearch = () => {
+    // const {sort, search} = this.state;
+    let data = this.state.sort.split(' ');
+    console.log(data);
+    this.props.searchProducts(this.state.search, data[1], data[0]);
+    // return this.props.navigation.reset({index: 0, routes: [{name: 'search'}]});
+    return this.props.navigation.navigate('search');
   }
   render() {
+    const {data} = this.props.products;
     return (
       <NativeBaseProvider>
-      <View style={styles.parent}>
+      <ScrollView style={styles.parent}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}> A good coffee is a good day</Text>
-        <Input
-        style={styles.inputBox}
-        variant= "rounded"
-        size="xs"
-        placeholder="Search"
-        _light={{
-          placeholderTextColor: 'blueGray.400',
-        }}
-        />
+          <Text style={styles.title}>A good coffee is a good day</Text>
+        <View style={styles.inputBoxWraper}>
+        <SearchBar
+              placeholder="Search"
+              onChangeText={value=>this.setState({search:value})}
+              onSubmitEditing={this.onSearch}
+              value={this.state.search}
+              platform="android"
+              containerStyle={styles.inputBoxParent}
+              inputStyle={styles.inputBox}
+            />
+            <Picker
+              style={styles.BoxPicker}
+              selectedValue={this.state.sort}
+              onValueChange={(itemValue, itemIndex) =>{
+                this.setState({sort: itemValue});}
+              }>
+              <Picker.Item label="lowest Price" value="asc price" />
+              <Picker.Item label="Highest Price" value="desc price" />
+              <Picker.Item label="Name A-Z" value="asc name" />
+              <Picker.Item label="Name Z-A" value="desc name"/>
+            </Picker>
+        </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {this.state.category.map((i, idx) => (
+        {this.props.products.categories.map((i, idx) => (
           <View style={styles.categoryNav} key={String(idx)} >
-            <TouchableOpacity onPress={()=> this.props.navigation.navigate('favorite')}>
-            <Text style={styles.textNav}>{i}</Text>
+            <TouchableOpacity onPress={()=> this.props.navigation.navigate(`${i.category}`, {id: i.id})}>
+            <Text style={styles.textNav}>{i.category}</Text>
             </TouchableOpacity>
           </View>
         ))}
         </ScrollView>
         </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {[...Array(20)].map((_i, idx) => (
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('detail')} style={styles.productCard} key={String(idx)}>
-            <View style={styles.images} />
+        <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.boxWrapper}
+        data={data}
+        renderItem={({item}) => (
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('detail', {id: item.id})} style={styles.productCard}>
+            <Image style={styles.images}
+             source={{uri: item.img_link}}
+            />
             <View style={styles.textWrapper}>
-            <Text style={styles.productName}>HazelNut Latte</Text>
-            <Text style={styles.price}>IDR 25.000</Text>
+            <Text style={styles.productName}>{item.name}</Text>
+            <Text style={styles.price}>{item.price}</Text>
             </View>
           </TouchableOpacity>
-    ))}
-      </ScrollView>
-    </View>
+        )}
+        keyExtractor={(item, index) => String(index)}
+        />
+    </ScrollView>
 
-    </NativeBaseProvider>
+  </NativeBaseProvider>
     );
   }
 }
@@ -54,23 +103,24 @@ export default class HomePage extends Component {
 
 const styles = StyleSheet.create({
   parent : {
+    flex: 1,
     backgroundColor: '#F2F2F2',
   },
  productCard: {
   backgroundColor: '#fff',
-  height : 220,
-  width: 180,
+  height : 180,
+  width: 150,
   borderRadius:30,
   elevation: 5,
-  margin: 38,
-  marginTop: 60,
+  margin: 15,
+  marginTop: 40,
   justifyContent: 'center',
   alignItems: 'center',
  },
  images: {
-   width: 138,
-   height: 149,
-   backgroundColor: 'grey',
+   width: 100,
+   height: 100,
+  //  backgroundColor: 'grey',
    borderRadius: 20,
    marginTop: -40,
    marginBottom: 15,
@@ -79,11 +129,14 @@ const styles = StyleSheet.create({
  textWrapper: {
   justifyContent: 'center',
   alignItems: 'center',
+  width: 140,
+  height: 80,
+  paddingHorizontal: 30,
  },
  productName: {
-  fontSize: 20,
+  fontSize: 16,
   fontWeight: 'bold',
-  width: 100,
+  width: 150,
   textAlign: 'center',
   marginBottom: 10,
  },
@@ -91,7 +144,6 @@ const styles = StyleSheet.create({
    color: '#6A4029',
  },
  titleBox: {
-    marginTop: 30,
     marginLeft: 38,
     marginRight: 38,
     color: 'black',
@@ -99,23 +151,41 @@ const styles = StyleSheet.create({
     fontSize: 15,
  },
  title: {
-    fontSize: 24,
+    fontSize: 34,
     fontWeight: 'bold',
-    marginBottom: 10,
-    width: 190,
+    marginBottom: 12,
+    width: 310,
+    marginTop: 10,
  },
- inputBox: {
-  width: 268,
-  height: 40,
-  backgroundColor: '#EFEEEE',
-  marginBottom: 15,
+ inputBoxParent: {
+  width: 300,
+  height: 60,
+  backgroundColor: 'white',
+  marginBottom: 5,
+  borderRadius: 20,
+  elevation: 3,
  },
- categoryNav: {
-
+ inputBoxWraper: {
+  marginBottom: 20,
  },
  textNav: {
+   marginTop: -5,
   margin : 10,
   fontSize: 17,
   color: '#6A4029',
  },
+ RadioWraper: {
+   flexDirection: 'row',
+   justifyContent: 'center',
+   alignItems: 'center',
+ },
 });
+
+const mapStateToProps = state => ({
+  products: state.products,
+  auth: state.auth,
+});
+
+const mapDispatchToProps = {getProducts, searchProducts, getCategories};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

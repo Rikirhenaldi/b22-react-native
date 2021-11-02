@@ -1,14 +1,34 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import { connect } from 'react-redux';
+import { getDetails } from '../redux/actions/products';
+import { addProducts } from '../redux/actions/carts';
 
-export default function ProductDetail() {
+class ProductDetail extends Component{
+  componentDidMount(){
+    console.log(this.props.route.params.id);
+    this.getData();
+  }
+
+  getData = () => {
+    this.props.getDetails(this.props.route.params.id);
+  }
+  addProductsToCart = () => {
+    const {item} = this.props.products?.details;
+    this.props.addProducts(item, 1, this.props.route.params.id)
+    this.props.navigation.navigate('cart')
+  }
+  render(){
+    const {item} = this.props.products?.details;
   return (
     <View style={styles.parent}>
       <View style={styles.child}>
-        <View style={styles.imageWrapper} />
-        <Text style={styles.textStyle1}>Cold Brew</Text>
-        <Text style={styles.price}>IDR 30.000</Text>
+        <Image style={styles.imageWrapper}
+          source={{uri: item?.img_link}}
+        />
+        <Text style={styles.textStyle1}>{item?.name}</Text>
+        <Text style={styles.price}>IDR {item?.price}</Text>
       </View>
       <View>
         <Text style={styles.titleStyle}>Delivery Info</Text>
@@ -19,16 +39,15 @@ export default function ProductDetail() {
       <View>
         <Text style={styles.titleStyle}>Descriptions</Text>
         <Text style={styles.textStyle3}>
-          Cold brewing is a method of brewing that combines ground coffee and
-          cool water and uses time instead of heat to extract the flavor. It is
-          brewed in small batches and steeped for as long as 48 hours.
+          {item?.description}
         </Text>
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={this.addProductsToCart}>
         <Text style={styles.buttonText}>Add to cart</Text>
       </TouchableOpacity>
     </View>
   );
+}
 }
 
 const styles = StyleSheet.create({
@@ -67,6 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 28,
     marginBottom: 10,
+    width: 300,
   },
   textStyle3: {
     marginLeft: 38,
@@ -103,3 +123,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+const mapStateToProps = state => ({
+  products : state.products,
+});
+const mapDispatchToProps = {getDetails, addProducts};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

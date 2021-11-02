@@ -1,12 +1,18 @@
 /* eslint-disable prettier/prettier */
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
 import React, { Component } from 'react';
-import {Input, NativeBaseProvider} from 'native-base';
+import { NativeBaseProvider} from 'native-base';
+import { getProductByCategories } from '../redux/actions/products';
+import { connect } from 'react-redux';
 
-export default class Favorite extends Component {
+class Favorite extends Component {
   constructor(props) {
     super(props);
     this.state =  {category: [{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000}]};
+  }
+  componentDidMount(){
+    console.log(this.props.route.params.id);
+    this.props.getProductByCategories(this.props.route.params.id);
   }
   render() {
     return (
@@ -18,14 +24,16 @@ export default class Favorite extends Component {
         <View style={styles.titleBox}>
           <Text style={styles.title2}> Everyone's Favorite</Text>
         </View>
-        <FlatList 
+        <FlatList
         showsVerticalScrollIndicator={false}
         style={styles.boxWrapper}
         numColumns={2}
-        data={this.state.category}
+        data={this.props.products.productByCategory}
         renderItem={({item}) => (
-          <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('detail')} style={styles.productCard}>
-          <View style={styles.images} />
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('detail', {id: item.id})} style={styles.productCard}>
+          <Image style={styles.images}
+             source={{uri: item.img_link}}
+            />
           <View style={styles.textWrapper}>
           <Text style={styles.productName}>{item.name}</Text>
           <Text style={styles.price}>{item.price}</Text>
@@ -105,3 +113,10 @@ const styles = StyleSheet.create({
   marginBottom: 8,
 },
 });
+const mapStateToProps = state => ({
+  products: state.products,
+});
+
+const mapDispatchToProps = {getProductByCategories};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

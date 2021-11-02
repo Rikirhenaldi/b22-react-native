@@ -9,83 +9,44 @@ import { deleteProducts } from '../redux/actions/carts';
 import {Picker} from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import { sumAmount, minAmount } from '../redux/actions/carts';
+import { getHistory } from '../redux/actions/history';
+import { STATEMENT_TYPES } from '@babel/types';
 
-class Cart extends Component {
+class OrderHistory extends Component {
 
     deleteCart = (idx) => {
       this.props.deleteProducts(idx);
     }
-
-    onSumCount = (id, amount) =>{
-      const {quantity} = this.props.products.details.item;
-      if (amount < quantity){
-      this.props.sumAmount(id);
-    } else {
-      console.log('cant buy more than stock');
-    }
-    }
-
-    onMinCount = (id, amount) =>{
-      if (amount < 1){
-        console.log('cant buy less than 0');
-      } else {
-     this.props.minAmount(id);
-     }
+    componentDidMount(){
+      const {token} = this.props.auth;
+      this.props.getHistory(token)
     }
 
   render() {
-    const {carts} = this.props;
-    console.log('ini data cart',carts?.data);
-
     return (
-      <View style={styles.parent}>
-          <View style={styles.stepPayment}>
-              <TouchableOpacity  style={styles.dot}>
-              <Fa5Icon name="dot-circle" size={35} color={'#6A4029'} />
-              <Text>  Order  </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('checkout') } style={styles.dot}>
-              <Fa5Icon name="dot-circle" size={35} color={'#9F9F9F'} />
-              <Text>Checkout</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=> this.props.navigation.navigate('payment')} style={styles.dot}>
-              <Fa5Icon name="dot-circle" size={35} color={'#9F9F9F'} />
-              <Text> Payment</Text>
-              </TouchableOpacity>
-        </View>
         <View style={styles.scrollWrapper}>
         <View>
-            <View style={styles.Swipe}>
+            <View style={styles.Cart}>
+                <Text style={styles.Order}>Order History</Text>
+          </View>
+          <View style={styles.Swipe}>
               <Icon name="gesture-swipe-left" size={26} />
               <Text style={styles.textSwipe}>Swipe on an item to Delete</Text>
             </View>
-            <View style={styles.Cart}>
-                <Text style={styles.nameProduct}>My Chart</Text>
-          </View>
           </View>
         <SwipeListView
         showsVerticalScrollIndicator={false}
-        data={carts?.data}
+        data={this.props.history?.listhistory}
         renderItem={(data, rowMap) => (
           <View style={styles.productCard}>
               <Image style={styles.productImage}
               source={{uri: data?.item.item?.img_link }}
               />
               <View style={styles.textWraper}>
-                {console.log('ini amount', data?.item.order?.amount)}
-                  <Text style={styles.nameProduct}>{data?.item.item?.name}</Text>
-                  <Text style={styles.priceProduct}>IDR.{data?.item.item?.price}</Text>
+                  <Text style={styles.nameProduct}>{data?.item.code}</Text>
+                  <Text style={styles.priceProduct}>IDR.{data?.item.total}</Text>
                   <View style={styles.amount}>
-                    <Text style={styles.variantProduct}>Regular</Text>
-                    <View style={styles.amountButton}>
-                      <TouchableOpacity style={styles.SumAndMin} onPress={() => this.onMinCount(data?.item.order?.id, data?.item.order?.amount)} >
-                        <Text>-</Text>
-                      </TouchableOpacity>
-                      <Text>{data?.item.order?.amount}</Text>
-                      <TouchableOpacity style={styles.SumAndMin} onPress={() => this.onSumCount(data?.item.order?.id, data?.item.order?.amount)} >
-                        <Text>+</Text>
-                      </TouchableOpacity>
-                    </View>
+                    <Text style={styles.variantProduct}>{data?.item.payment_method}</Text>
                   </View>
               </View>
           </View>
@@ -105,23 +66,6 @@ class Cart extends Component {
         rightOpenValue={-110}
         keyExtractor={(data, rowMap) => String(rowMap)}
         />
-        <View>
-        <View style={styles.Card2}>
-                <View style={styles.deliveIcon}/>
-                <Fa5Icon style={styles.Icon} name="shipping-fast" size={30} />
-                <View style={styles.textWraper2}>
-                    <Text style={styles.total}>Total Price:</Text>
-                    <Text style={styles.totalprice}>IDR.25.000</Text>
-                </View>
-          </View>
-          <View style={styles.Card3}>
-              <Text style={styles.order}>Complete Order</Text>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('checkout') }>
-              <Fa5Icon name="arrow-alt-circle-right" size={40} />
-              </TouchableOpacity>
-            </View>
-          </View>
-          </View>
       </View>
     );
   }
@@ -135,14 +79,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#F2F2F2',
         flex: 1,
     },
-    stepPayment: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginTop: 30,
-      width: 200,
-      marginBottom:20,
+    Order: {
+      fontSize: 34,
+      fontWeight: 'bold',
+      marginTop: 60,
+      marginHorizontal: 20,
     },
+    stepPayment: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 110,
+        width: 200,
+        marginBottom:20,
+      },
       dot : {
         textAlign: 'center',
         justifyContent: 'center',
@@ -301,8 +251,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-  carts : state.carts,
+  auth : state.auth,
   products: state.products,
+  history: state.history,
 });
-const mapDispatchToProps = {deleteProducts, sumAmount, minAmount};
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+const mapDispatchToProps = {deleteProducts, getHistory};
+export default connect(mapStateToProps, mapDispatchToProps)(OrderHistory);

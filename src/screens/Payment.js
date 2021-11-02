@@ -1,16 +1,47 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {Text, View, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
-import Button from '../components/Button';
 import Fa5Icon from 'react-native-vector-icons/FontAwesome5';
 import DebitComponent from '../components/DebitComponent';
+import { connect } from 'react-redux';
+import { postPayment, clearMessage } from '../redux/actions/payment';
+import { deleteProducts } from '../redux/actions/carts';
+import ButtonAction from '../components/ButtonAction';
+import { showMessage, hideMessage } from 'react-native-flash-message';
 
-export default class Payment extends Component {
+class Payment extends Component {
   constructor(props) {
     super(props);
     this.state =  {product: ['hazelnut','Pinky Promise', 'MatchaLatte','Pinky Promise', 'MatchaLatte', 'MatchaLatte','Pinky Promise', 'MatchaLatte']};
   }
+  onPayment = (e) =>{
+    e.preventDefault();
+    const {data} = this.props.carts;
+    const {token} = this.props.auth;
+      this.props.postPayment(data, token);
+    setTimeout(() => {
+        this.props.clearMessage();
+        data.map(item => {
+          this.props.deleteProducts(item);
+        });
+      }, 50);
+
+      const msg = this.props.auth.sccMesg;
+      console.log(msg);
+      if (msg !== ''){
+        showMessage({
+          message: 'Payment Success',
+          type: 'info',
+        });
+      } else {
+        hideMessage({
+          message: 'Login Success',
+          type: 'info',
+        });
+      }
+  }
   render() {
+    const {carts} = this.props;
     return (
       <View style={styles.parent}>
         <View style={styles.stepPayment}>
@@ -34,16 +65,16 @@ export default class Payment extends Component {
           <FlatList
           showsVerticalScrollIndicator={false}
             style={styles.boxWrapper}
-            data={this.state.product}
+            data={carts.data}
             ListHeaderComponent={DebitComponent}
             renderItem={({item}) => (
               <View style={styles.menuItemWrapper}>
                 <View>
-                  <Text style={styles.productName}>{item}</Text>
+                  <Text style={styles.productName}>{item.item.name}</Text>
                   <Text style={styles.variantName}>Regular</Text>
                 </View>
                 <View>
-                  <Text style={styles.productName}>IDR. 50.000</Text>
+                  <Text style={styles.productName}>{item.item.price}</Text>
                 </View>
               </View>
             )}
@@ -71,7 +102,7 @@ export default class Payment extends Component {
                   </View>
                   </View>
                   <View style={styles.Button}>
-                  <Button buttonName="Pay Now"/>
+                  <ButtonAction buttonName="Pay Now" action={this.onPayment}/>
                   </View>
               </View>
             )}
@@ -115,7 +146,7 @@ const styles = StyleSheet.create({
   separator: {
     borderBottomWidth: 2,
     borderBottomColor: '#6A4029',
-    
+
   },
   topSeparator: {
     borderTopWidth: 2,
@@ -162,3 +193,9 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
 });
+const mapStateToProps = state => ({
+  carts : state.carts,
+  auth : state.auth,
+});
+const mapDispatchToProps = {postPayment, clearMessage, deleteProducts};
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);

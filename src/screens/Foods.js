@@ -1,38 +1,42 @@
 /* eslint-disable prettier/prettier */
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
 import React, { Component } from 'react';
-import {Input, NativeBaseProvider} from 'native-base';
+import { NativeBaseProvider} from 'native-base';
+import { getProductByCategories } from '../redux/actions/products';
+import { connect } from 'react-redux';
 
-export default class Promo extends Component {
+class Foods extends Component {
   constructor(props) {
     super(props);
     this.state =  {category: [{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000},{name: 'coffe Latte', price: 20000}]};
+  }
+  componentDidMount(){
+    console.log(this.props.route.params.id);
+    this.props.getProductByCategories(this.props.route.params.id);
   }
   render() {
     return (
       <NativeBaseProvider>
       <View style={styles.parent}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>Promo for you</Text>
+          <Text style={styles.title}> Foods </Text>
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.title2}> Stay Hungry!</Text>
-          <Text style={styles.title}> Good deals update every wednesday</Text>
+          <Text style={styles.title2}> Special Tasted Foods</Text>
         </View>
         <FlatList
         showsVerticalScrollIndicator={false}
         style={styles.boxWrapper}
         numColumns={2}
-        data={this.state.category}
+        data={this.props.products.productByCategory}
         renderItem={({item}) => (
-          <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('detail')} style={styles.productCard}>
-          <View style={styles.images} />
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('detail', {id: item.id})} style={styles.productCard}>
+          <Image style={styles.images}
+             source={{uri: item.img_link}}
+            />
           <View style={styles.textWrapper}>
-            <View style={styles.discountPrice}>
-              <Text style={styles.newPrice}>IDR.{item.price}</Text>
-            </View>
           <Text style={styles.productName}>{item.name}</Text>
-          <Text style={styles.price}>IDR. 50.000</Text>
+          <Text style={styles.price}>{item.price}</Text>
           </View>
         </TouchableOpacity>
         )}
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
   },
  productCard: {
   backgroundColor: '#fff',
-  height : 190,
+  height : 200,
   width: 140,
   borderRadius:30,
   elevation: 5,
@@ -86,7 +90,6 @@ const styles = StyleSheet.create({
  },
  price: {
    color: '#6A4029',
-   textDecorationLine: 'line-through',
  },
  titleBox: {
     marginTop: 22,
@@ -109,18 +112,11 @@ const styles = StyleSheet.create({
   fontWeight: 'bold',
   marginBottom: 8,
 },
-discountPrice: {
-  width: 90,
-  height: 30,
-  borderRadius: 20,
-  backgroundColor: 'white',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: -30,
-  marginBottom: 20,
-  elevation: 3,
-},
-newPrice: {
-  color: '#6A4029',
-},
 });
+const mapStateToProps = state => ({
+  products: state.products,
+});
+
+const mapDispatchToProps = {getProductByCategories};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Foods);

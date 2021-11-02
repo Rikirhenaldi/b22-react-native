@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import React from 'react';
+import ButtonLogout from './ButtonLogout';
 const DrawerContent = ({descriptors, navigation}) => {
   const menuItem = Object.keys(descriptors);
   // const routeName = menuItem.map(item => item.split('-').slice(-1)[0])
@@ -29,11 +30,9 @@ const DrawerContent = ({descriptors, navigation}) => {
           <View style={DrawerStyles.menuSeparator} />
         )}
       />
-      <View style={DrawerStyles.signOut}>
-        <TouchableOpacity>
-          <Text style={DrawerStyles.menuItem}>Sign-Out</Text>
+        <TouchableOpacity style={DrawerStyles.signOut} onPress={() => navigation.navigate('welcome')}>
+        <ButtonLogout />
         </TouchableOpacity>
-      </View>
     </View>
   );
 };
