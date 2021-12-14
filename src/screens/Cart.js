@@ -74,7 +74,7 @@ class Cart extends Component {
               <View style={styles.textWraper}>
                 {console.log('ini amount', data?.item.order?.amount)}
                   <Text style={styles.nameProduct}>{data?.item.item?.name}</Text>
-                  <Text style={styles.priceProduct}>IDR.{data?.item.item?.price}</Text>
+                  <Text style={styles.priceProduct}>IDR.{data?.item.item?.price.toLocaleString('en')}</Text>
                   <View style={styles.amount}>
                     <Text style={styles.variantProduct}>Regular</Text>
                     <View style={styles.amountButton}>

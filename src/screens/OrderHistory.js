@@ -10,16 +10,19 @@ import {Picker} from '@react-native-community/picker';
 import { connect } from 'react-redux';
 import { sumAmount, minAmount } from '../redux/actions/carts';
 import { getHistory } from '../redux/actions/history';
+import { deleteHistory } from '../redux/actions/history';
 import { STATEMENT_TYPES } from '@babel/types';
 
 class OrderHistory extends Component {
 
-    deleteCart = (idx) => {
-      this.props.deleteProducts(idx);
+    deleteCartHistory = (idpayment, idx) => {
+      const {token} = this.props.auth;
+      this.props.deleteHistory(idpayment, token);
+      this.props.getHistory(token);
     }
     componentDidMount(){
       const {token} = this.props.auth;
-      this.props.getHistory(token)
+      this.props.getHistory(token);
     }
 
   render() {
@@ -31,7 +34,7 @@ class OrderHistory extends Component {
           </View>
           <View style={styles.Swipe}>
               <Icon name="gesture-swipe-left" size={26} />
-              <Text style={styles.textSwipe}>Swipe on an item to Delete</Text>
+              <Text style={styles.textSwipe}>Swipe on an item to see Detail or Delete</Text>
             </View>
           </View>
         <SwipeListView
@@ -39,25 +42,26 @@ class OrderHistory extends Component {
         data={this.props.history?.listhistory}
         renderItem={(data, rowMap) => (
           <View style={styles.productCard}>
-              <Image style={styles.productImage}
-              source={{uri: data?.item.item?.img_link }}
-              />
+              <View style={styles.productImage}>
+                <FaIcon name="shopping-bag" size={40} />
+              </View>
               <View style={styles.textWraper}>
                   <Text style={styles.nameProduct}>{data?.item.code}</Text>
-                  <Text style={styles.priceProduct}>IDR.{data?.item.total}</Text>
+                  <Text style={styles.priceProduct}>IDR.{data?.item.total.toLocaleString("en")}</Text>
                   <View style={styles.amount}>
                     <Text style={styles.variantProduct}>{data?.item.payment_method}</Text>
                   </View>
               </View>
           </View>
         )}
+        inverted
         renderHiddenItem={ (data, rowMap) => (
           <View style={styles.rowBack}>
-              <TouchableOpacity style={styles.rowButton}>
-                {console.log(data.index)}
-                <FaIcon name="heart-o" size={20}/>
+              <TouchableOpacity style={styles.rowButton} onPress={() => this.props.navigation.navigate('detailhistory', {id: data?.item.id_payment})}>
+                {console.log('ini id',data)}
+                <FaIcon name="list" size={20}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rowButton} onPress={() => this.deleteCart(data?.index)}>
+              <TouchableOpacity style={styles.rowButton} onPress={() => this.deleteCartHistory(data?.item.id_payment, data?.index)}>
                 <FaIcon name="trash-o" size={20}/>
               </TouchableOpacity>
           </View>
@@ -137,8 +141,11 @@ const styles = StyleSheet.create({
       productImage: {
         width: 90,
         height: 90,
-        backgroundColor: 'grey',
+        backgroundColor: '#FFBA33',
         borderRadius: 45,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
       },
       deliveIcon: {
         width: 70,
@@ -255,5 +262,5 @@ const mapStateToProps = state => ({
   products: state.products,
   history: state.history,
 });
-const mapDispatchToProps = {deleteProducts, getHistory};
+const mapDispatchToProps = {deleteProducts, getHistory, deleteHistory};
 export default connect(mapStateToProps, mapDispatchToProps)(OrderHistory);

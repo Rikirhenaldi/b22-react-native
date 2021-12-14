@@ -87,7 +87,7 @@ class HomePage extends Component {
             />
             <View style={styles.textWrapper}>
             <Text style={styles.productName}>{item.name}</Text>
-            <Text style={styles.price}>{item.price}</Text>
+            <Text style={styles.price}>{item.price.toLocaleString('en')}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -153,9 +153,9 @@ const styles = StyleSheet.create({
  title: {
     fontSize: 34,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 15,
     width: 310,
-    marginTop: 10,
+    marginTop: 15,
  },
  inputBoxParent: {
   width: 300,
@@ -170,7 +170,9 @@ const styles = StyleSheet.create({
  },
  textNav: {
    marginTop: -5,
-  margin : 10,
+  marginRight : 10,
+  marginLeft: 5,
+  marginBottom: 15,
   fontSize: 17,
   color: '#6A4029',
  },
@@ -178,6 +180,9 @@ const styles = StyleSheet.create({
    flexDirection: 'row',
    justifyContent: 'center',
    alignItems: 'center',
+ },
+ BoxPicker: {
+   marginLeft: -5,
  },
 });
 

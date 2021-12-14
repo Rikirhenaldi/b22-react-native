@@ -30,6 +30,7 @@ import ChatList from './src/screens/ChatList';
 import ChatRoom from './src/screens/ChatRoom';
 import OrderHistory from './src/screens/OrderHistory';
 import Coffee from './src/screens/Coffee';
+import DetailHistory from './src/screens/DetailHistory';
 
 import FAIcons from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -223,6 +224,15 @@ class MainStack extends Component {
               cardStyle: {backgroundColor: 'transparent'},
               headerTransparent: true,
             }}
+            name="detailhistory"
+            component={DetailHistory}
+          />
+          <Stack.Screen
+            options={{
+              header: Headers,
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+            }}
             name="search"
             component={Search}
           />
@@ -365,7 +375,12 @@ const App = () => {
           component={OrderStack}
         />
         <Drawer.Screen
-          options={{title: 'All Menu'}}
+          options={{
+            header: Headers,
+            cardStyle: {backgroundColor: 'transparent'},
+            headerTransparent: true,
+            title: 'All Menu',
+          }}
           name="allMenu"
           component={AllMenu}
         />

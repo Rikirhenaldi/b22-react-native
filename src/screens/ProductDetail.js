@@ -28,7 +28,7 @@ class ProductDetail extends Component{
           source={{uri: item?.img_link}}
         />
         <Text style={styles.textStyle1}>{item?.name}</Text>
-        <Text style={styles.price}>IDR {item?.price}</Text>
+        <Text style={styles.price}>IDR {item?.price.toLocaleString('en')}</Text>
       </View>
       <View>
         <Text style={styles.titleStyle}>Delivery Info</Text>

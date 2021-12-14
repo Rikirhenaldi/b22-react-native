@@ -10,7 +10,7 @@ export const getHistory = (token) => {
         const {data} = await http(token).get(`${BACKEND_URL}/private/profile/history_transactions`);
         dispatch({
           type: 'GET_HISTORY',
-          payload: data.results
+          payload: data.results,
         });
       } catch (err){
         console.log('ini kenapa', err);
@@ -18,12 +18,33 @@ export const getHistory = (token) => {
     };
 };
 
-export const getDetailHistory = (id) => {
+export const getDetailHistory = (id, token) => {
   return async (dispatch) => {
-    const {data} = await http().get(`${BACKEND_URL}/private/profile/history_transactions/${id}`);
-    dispatch({
-      type: 'GET_DETAIL_HISTORY',
-      payload: data.results
-    });
+    try {
+      const {data} = await http(token).get(`${BACKEND_URL}/private/profile/history_transactions/${id}`);
+      dispatch({
+        type: 'GET_DETAIL_HISTORY',
+        payload: data.results,
+      });
+    } catch (err){
+      console.log('ini kenapa', err);
+    }
   };
 };
+
+export const deleteHistory = (id, token) => {
+  console.log('ini id di action', id);
+  return async (dispatch) => {
+    try {
+      const {data} = await http(token).get(`${BACKEND_URL}/private/profile/delete_history/${id}`);
+      dispatch({
+        type: 'DELETE_HISTORY',
+        payload: data.message,
+      });
+    } catch (err){
+      console.log('ini kenapa', err);
+    }
+  };
+};
+
+

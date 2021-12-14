@@ -1,6 +1,8 @@
 const initialState = {
   listhistory: '',
   detailhistory: '',
+  sccMsg: '',
+  data:[],
 };
 
 const history = (state = initialState, action) => {
@@ -15,6 +17,12 @@ const history = (state = initialState, action) => {
       return {
         ...state,
         detailhistory: action.payload,
+      };
+    }
+    case 'DELETE_HISTORY': {
+      return {
+        ...state,
+        sccMsg: action.payload,
       };
     }
     default: {

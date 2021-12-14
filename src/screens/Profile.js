@@ -26,7 +26,7 @@ class Profile extends Component{
   }
   onLogOut = () => {
     const {token} = this.props.auth;
-    this.props.authLogOut()
+    this.props.authLogOut();
       if (token === null){
         showMessage({
           message: 'Logout Success',
@@ -35,7 +35,7 @@ class Profile extends Component{
         });
         return this.props.navigation.reset({index: 0, routes: [{name: 'welcome'}]});
       }
-    
+
   }
   render(){
   return (
@@ -96,12 +96,11 @@ class Profile extends Component{
 const styles = StyleSheet.create({
     parent: {
         alignItems: 'center',
-        paddingBottom: 40,
-        marginTop: 60,
+        marginTop: 10,
     },
     MyProfile: {
-        width: 280,
-        height: 60,
+        width: 290,
+        height: 55,
         fontSize: 34,
         fontWeight: 'bold',
     },
@@ -113,7 +112,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: 280,
         marginBottom: 20,
-        marginTop: 20,
       },
       addressDetail: {
         fontWeight: 'bold',
