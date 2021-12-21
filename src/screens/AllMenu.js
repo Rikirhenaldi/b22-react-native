@@ -12,10 +12,10 @@ class AllMenu extends Component {
     return (
       <View style={styles.parent}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}> Non Coffee </Text>
+          <Text style={styles.title}> All Menu </Text>
         </View>
         <View style={styles.titleBox}>
-          <Text style={styles.title2}> Special Tasted Drinks</Text>
+          <Text style={styles.title2}>Tasted Foods & Drinks</Text>
         </View>
         <FlatList
         showsVerticalScrollIndicator={false}
@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
  },
  boxWrapper: {
   paddingBottom: 20,
+  width: '100%',
+  paddingHorizontal: 20
 },
  images: {
    width: 120,
@@ -79,6 +81,7 @@ const styles = StyleSheet.create({
   width: 100,
   textAlign: 'center',
   marginBottom: 10,
+  height: 50,
  },
  price: {
    color: '#6A4029',

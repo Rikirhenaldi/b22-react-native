@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
  },
  boxWrapper: {
   paddingBottom: 20,
+  width: '100%',
+  paddingHorizontal: 20,
 },
  images: {
    width: 120,
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
   width: 100,
   textAlign: 'center',
   marginBottom: 10,
+  height: 50,
  },
  price: {
    color: '#6A4029',

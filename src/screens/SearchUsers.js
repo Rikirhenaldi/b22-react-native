@@ -1,39 +1,41 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, FlatList, Image} from 'react-native';
+import {Text, View, StyleSheet, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {getDetailHistory} from '../redux/actions/history';
 
-class DetailHistory extends Component {
-  componentDidMount() {
-    const {token} = this.props.auth;
-    this.props.getDetailHistory(this.props.route.params.id, token);
-  }
+class SearchUsers extends Component {
 
   render() {
     return (
       <View style={styles.parent}>
         <View style={styles.Cart}>
-          <Text style={styles.History}>Detail Product</Text>
+          <Text style={styles.History}>Search Results</Text>
         </View>
         <FlatList
           showsVerticalScrollIndicator={false}
           style={styles.boxWrapper}
           // ListHeaderComponent={}
-          data={this.props.history?.detailhistory}
+          data={this.props.chats?.search}
           renderItem={({item}) => (
-            <View style={styles.productCard}>
-              <Image style={styles.productImages} source={{uri: item.img}} />
+            <TouchableOpacity style={styles.productCard}
+            onPress={() =>
+              this.props.navigation.navigate('chatroom', {
+                phoneNumber: item.phoneNumber,
+                img: item.img,
+                name: item.name,
+              })
+            } >
+              <Image style={styles.userImages} source={{uri: item.img}} />
               <View style={styles.textWrapper}>
-                <Text style={styles.productName}>
-                  Name :{item.name_product}
+                <Text style={styles.name}>
+                  Name : {item.name}
                 </Text>
-                <Text style={styles.price}>
-                  Price: {item.price_product.toLocaleString('en')}
+                <Text style={styles.name}>
+                  No.Hp : {item.phoneNumber}
                 </Text>
-                <Text style={styles.price}>Amount: {item.amount}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
           keyExtractor={(item, index) => String(index)}
         />
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
   Cart: {
     marginBottom: 20,
   },
-  productImages: {
+  userImages: {
     width: 90,
     height: 90,
     backgroundColor: 'grey',
@@ -78,13 +80,17 @@ const styles = StyleSheet.create({
   textWrapper: {
     marginHorizontal: 20,
   },
+  name: {
+    fontSize: 18,
+    marginBottom: 5,
+  }
 });
 
 const mapStateToProps = state => ({
   auth: state.auth,
   products: state.products,
-  history: state.history,
+  chats: state.chats,
 });
 
 const mapDispatchToProps = {getDetailHistory};
-export default connect(mapStateToProps, mapDispatchToProps)(DetailHistory);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchUsers);

@@ -105,7 +105,7 @@ class EditProfile extends Component {
           duration: 1,
         });
       }
-      return this.props.navigation.navigate('profile');
+      return this.props.navigation.navigate('user');
     });
   }
 

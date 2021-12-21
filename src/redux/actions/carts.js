@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const addProducts = (item, amount, index) => {
   return {
     type: 'CARTS_ADD_ITEM',

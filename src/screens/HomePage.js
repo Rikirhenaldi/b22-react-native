@@ -34,7 +34,7 @@ class HomePage extends Component {
     console.log(data);
     this.props.searchProducts(this.state.search, data[1], data[0]);
     // return this.props.navigation.reset({index: 0, routes: [{name: 'search'}]});
-    return this.props.navigation.navigate('search');
+    return this.props.navigation.navigate('Searching');
   }
   render() {
     const {data} = this.props.products;
@@ -108,20 +108,20 @@ const styles = StyleSheet.create({
   },
  productCard: {
   backgroundColor: '#fff',
-  height : 180,
+  height : 190,
   width: 150,
   borderRadius:30,
   elevation: 5,
   margin: 15,
-  marginTop: 40,
+  marginTop: 50,
   justifyContent: 'center',
   alignItems: 'center',
  },
  images: {
-   width: 100,
-   height: 100,
+   width: 110,
+   height: 115,
   //  backgroundColor: 'grey',
-   borderRadius: 20,
+   borderRadius: 25,
    marginTop: -40,
    marginBottom: 15,
 

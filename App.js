@@ -38,6 +38,8 @@ import NonCoffee from './src/screens/NonCoffee';
 import Foods from './src/screens/Foods';
 import Addon from './src/screens/Addon';
 import {postPayment} from './src/redux/actions/payment';
+import SearchUsers from './src/screens/SearchUsers';
+import SplasedScreen from './src/screens/SplasedScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -102,7 +104,7 @@ class MainStack extends Component {
   render() {
     return (
       <NativeBaseProvider>
-        <Stack.Navigator initialRouteName="welcome">
+        <Stack.Navigator initialRouteName="splasedscreen">
           <Stack.Screen
             component={BottomTab}
             name="home"
@@ -243,17 +245,36 @@ class MainStack extends Component {
               cardStyle: {backgroundColor: 'transparent'},
               headerTransparent: true,
             }}
-            name="Promo"
-            component={Promo}
+            name="searchusers"
+            component={SearchUsers}
           />
+
           <Stack.Screen
             options={{
               header: Headers,
               cardStyle: {backgroundColor: 'transparent'},
               headerTransparent: true,
             }}
+            name="Promo"
+            component={Promo}
+          />
+          <Stack.Screen
+            options={{
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+              headerShown: false,
+            }}
             name="welcome"
             component={Welcome}
+          />
+          <Stack.Screen
+            options={{
+              cardStyle: {backgroundColor: 'transparent'},
+              headerTransparent: true,
+              headerShown: false,
+            }}
+            name="splasedscreen"
+            component={SplasedScreen}
           />
           <Stack.Screen
             options={{
@@ -323,6 +344,22 @@ const OrderStack = () => {
   );
 };
 
+const AllMenuStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        options={{
+          header: Headers,
+          cardStyle: {backgroundColor: 'transparent'},
+          headerTransparent: true,
+        }}
+        name="AllMenu"
+        component={AllMenu}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const EditProfileStack = () => {
   return (
     <Stack.Navigator>
@@ -381,8 +418,8 @@ const App = () => {
             headerTransparent: true,
             title: 'All Menu',
           }}
-          name="allMenu"
-          component={AllMenu}
+          name="allMenuStack"
+          component={AllMenuStack}
         />
         <Drawer.Screen
           options={{title: 'Privacy Policy'}}

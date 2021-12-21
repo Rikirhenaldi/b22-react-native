@@ -85,19 +85,19 @@ class Payment extends Component {
                   <View style={styles.total}>
                     <Text style={styles.subTotalText}>subtotal</Text>
                     <View>
-                      <Text style={styles.subTotalText}>IDR 50.000</Text>
+                      <Text style={styles.subTotalText}>IDR 120.000</Text>
                     </View>
                   </View>
                   <View style={styles.total}>
                     <Text style={styles.subTotalText}>Tax</Text>
                     <View>
-                      <Text style={styles.subTotalText}>IDR 16.000</Text>
+                      <Text style={styles.subTotalText}>IDR 10.000</Text>
                     </View>
                   </View>
                   <View style={styles.total}>
                     <Text style={styles.totalText}>Total</Text>
                       <View>
-                        <Text style={styles.totalText}>IDR 50.000</Text>
+                        <Text style={styles.totalText}>IDR 130.000</Text>
                       </View>
                   </View>
                   </View>

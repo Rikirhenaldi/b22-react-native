@@ -111,7 +111,7 @@ class Cart extends Component {
                 <Fa5Icon style={styles.Icon} name="shipping-fast" size={30} />
                 <View style={styles.textWraper2}>
                     <Text style={styles.total}>Total Price:</Text>
-                    <Text style={styles.totalprice}>IDR.25.000</Text>
+                    <Text style={styles.totalprice}>IDR.120.000</Text>
                 </View>
           </View>
           <View style={styles.Card3}>

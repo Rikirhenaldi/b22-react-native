@@ -20,7 +20,7 @@ class Search extends Component {
     let data = this.state.sort.split(' ');
     console.log(data);
     this.props.searchProducts(this.state.search, data[1], data[0]);
-    return this.props.navigation.navigate("search");
+    return this.props.navigation.navigate("Searching");
   }
   render() {
     return (
@@ -116,12 +116,14 @@ const styles = StyleSheet.create({
   borderRadius:30,
   elevation: 5,
   margin: 20,
-  marginTop: 60,
+  marginTop: 25,
   justifyContent: 'center',
   alignItems: 'center',
  },
  boxWrapper: {
   paddingBottom: 20,
+  width: '100%',
+  paddingHorizontal: 20
 },
  images: {
    width: 120,

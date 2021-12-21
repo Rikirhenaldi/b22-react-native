@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 class Welcome extends Component {
 
   async componentDidMount () {
-    const {token} = this.props?.auth;
+    const {token} = this.props.auth;
     if (typeof token === 'string'){
       console.log(typeof token === 'string');
       this.props.navigation.navigate('home');

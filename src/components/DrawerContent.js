@@ -9,7 +9,7 @@ const DrawerContent = ({descriptors, navigation}) => {
   return (
     <View style={DrawerStyles.Parent}>
       <View style={DrawerStyles.User}>
-        <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('user')}>
             <View style={DrawerStyles.imageWrapper} />
         </TouchableOpacity>
         <Text style={DrawerStyles.UserText}>Zulaikha</Text>

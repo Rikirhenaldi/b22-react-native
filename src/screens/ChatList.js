@@ -12,6 +12,7 @@ import {SearchBar} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {getProfile} from '../redux/actions/profile';
 import {getChatList} from '../redux/actions/chats';
+import { searchUsers } from '../redux/actions/chats';
 
 class ChatList extends Component {
   constructor(props) {
@@ -52,8 +53,7 @@ class ChatList extends Component {
     //   this.onGetChat(data.sender);;
     // })
     this.props
-      .getChatList(token)
-      .then(() => {
+      .getChatList(token).then(() => {
         this.props.chats.chatlist.map(item => {
           if (this.state.phoneNumber !== item.sender) {
             this.setState(
@@ -97,12 +97,18 @@ class ChatList extends Component {
             );
           }
         });
-        console.log('ini state finaldata', this.state.finaldata);
-        console.log('ini apa', typeof this.props.chats.chatroom === 'object');
+        // console.log('ini state finaldata', this.state.finaldata);
+        // console.log('ini apa', typeof this.props.chats.chatroom === 'object');
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  onSearch = () => {
+    const {token} = this.props.auth;
+    this.props.searchUsers(this.state.search, token);
+    return this.props.navigation.navigate('searchusers');
   }
 
   render() {
@@ -274,6 +280,6 @@ const mapStateToProps = state => ({
   profile: state.profile,
   chats: state.chats,
 });
-const mapDispatchToProps = {getProfile, getChatList};
+const mapDispatchToProps = {getProfile, getChatList, searchUsers};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
