@@ -12,7 +12,7 @@ class SplasedScreen extends Component {
       } else {
         this.props.navigation.reset({index: 0, routes: [{name: 'welcome'}]});
       }
-    }, 2000);
+    }, 1000);
   }
   render() {
     return (

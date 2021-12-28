@@ -24,11 +24,11 @@ class EditProfile extends Component {
     await this.props.getProfile(token);
     // await this.props.getHistoryProducts(token);
     const {user} = this.props.profile?.data;
-    this.setState({email: user[0].email});
-    this.setState({name: user[0].name});
-    this.setState({img: user[0].img});
-    this.setState({phoneNumber: user[0].phoneNumber});
-    this.setState({address: user[0].address});
+    this.setState({email: user.email});
+    this.setState({name: user.name});
+    this.setState({img: user.img});
+    this.setState({phoneNumber: user.phoneNumber});
+    this.setState({address: user.address});
     console.log('ini email setstate', this.state);
   }
 
@@ -105,6 +105,7 @@ class EditProfile extends Component {
           duration: 1,
         });
       }
+      this.props.getProfile(this.props.auth.token);
       return this.props.navigation.navigate('user');
     });
   }

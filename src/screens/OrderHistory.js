@@ -12,9 +12,26 @@ import { sumAmount, minAmount } from '../redux/actions/carts';
 import { getHistory } from '../redux/actions/history';
 import { deleteHistory } from '../redux/actions/history';
 import { STATEMENT_TYPES } from '@babel/types';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class OrderHistory extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showAlert: false };
+  };
 
+    showAlert = () => {
+      this.setState({
+        showAlert: true,
+      });
+    };
+
+    hideAlert = () => {
+      this.setState({
+        showAlert: false,
+      });
+    };
+    
     deleteCartHistory = (idpayment, idx) => {
       const {token} = this.props.auth;
       this.props.deleteHistory(idpayment, token);
@@ -61,9 +78,32 @@ class OrderHistory extends Component {
                 {console.log('ini id',data)}
                 <FaIcon name="list" size={20}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rowButton} onPress={() => this.deleteCartHistory(data?.item.id_payment, data?.index)}>
+              <TouchableOpacity style={styles.rowButton} onPress={() => this.showAlert()}>
                 <FaIcon name="trash-o" size={20}/>
               </TouchableOpacity>
+              <AwesomeAlert
+            show={this.state.showAlert}
+            titleStyle={styles.title}
+            messageStyle={styles.message}
+            showProgress={false}
+            title="Warning"
+            message="Are you sure you want to delete this history payment ?"
+            closeOnTouchOutside={true}
+            closeOnHardwareBackPress={false}
+            showCancelButton={true}
+            showConfirmButton={true}
+            cancelText="No, cancel"
+            confirmText="Yes, delete it"
+            confirmButtonColor="#FFBA33"
+            cancelButtonStyle={styles.cancel}
+            confirmButtonStyle={styles.confirm}
+            onCancelPressed={() => {
+              this.hideAlert();
+            }}
+            onConfirmPressed={() => {
+              this.deleteCartHistory(data?.item.id_payment, data?.index)
+            }}
+          />
           </View>
         )}
         leftOpenValue={0}
@@ -254,6 +294,19 @@ const styles = StyleSheet.create({
     picker: {
       width: 100,
       height: 30,
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 4,
+    },
+    message: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    cancel: {
+      marginRight: 60,
     },
 });
 

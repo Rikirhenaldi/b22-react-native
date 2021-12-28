@@ -18,16 +18,15 @@ class Profile extends Component{
     const {token} = this.props.auth;
     await this.props.getProfile(token);
     const {user} = this.props.profile?.data;
-    this.setState({email: user[0].email});
-    this.setState({name: user[0].name});
-    this.setState({img: user[0].img});
-    this.setState({phoneNumber: user[0].phoneNumber});
-    this.setState({address: user[0].address});
+    this.setState({email: user.email});
+    this.setState({name: user.name});
+    this.setState({img: user.img});
+    this.setState({phoneNumber: user.phoneNumber});
+    this.setState({address: user.address});
   }
   onLogOut = () => {
-    const {token} = this.props.auth;
-    this.props.authLogOut();
-      if (token === null){
+    this.props.authLogOut()
+      if (this.props.auth.token === null){
         showMessage({
           message: 'Logout Success',
           type: 'info',
@@ -35,7 +34,6 @@ class Profile extends Component{
         });
         return this.props.navigation.reset({index: 0, routes: [{name: 'welcome'}]});
       }
-
   }
   render(){
   return (
@@ -51,16 +49,16 @@ class Profile extends Component{
         <View style={styles.infoUser}>
             <View>
                 <Image style={styles.imageWrapper}
-                source={{uri: this.state.img}}
+                source={{uri: this.props.profile?.data?.user?.img}}
                 />
             </View>
             <View style={styles.detailInfo}>
-                <Text style={styles.TextName}>{this.state.name}</Text>
-                <Text style={styles.TextStyle}>{this.state.email}</Text>
+                <Text style={styles.TextName}>{this.props.profile?.data?.user?.name}</Text>
+                <Text style={styles.TextStyle}>{this.props.profile?.data?.user?.email}</Text>
                 <View style={styles.separator} />
-                <Text style={styles.TextStyle}>{this.state.phoneNumber}</Text>
+                <Text style={styles.TextStyle}>{this.props.profile?.data?.user?.phoneNumber}</Text>
                 <View style={styles.separator} />
-                <Text style={styles.TextStyle}>{this.state.address}</Text>
+                <Text style={styles.TextStyle}>{this.props.profile?.data?.user?.address}</Text>
             </View>
         </View>
         <TouchableOpacity style={styles.button} onPress={()=> this.props.navigation.navigate('orderhistory')}>

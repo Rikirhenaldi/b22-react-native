@@ -10,6 +10,7 @@ import profile from './profile';
 import payment from './payment';
 import chats from './chats';
 import history from './history';
+import { globalReducer } from './global';
 
 const storage = createAsyncStorage();
 
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   auth: persistReducer(persistAuth, auth),
   products,
   carts,
+  globalReducer,
   profile,
   payment,
   chats,

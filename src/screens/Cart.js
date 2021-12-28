@@ -116,7 +116,7 @@ class Cart extends Component {
           </View>
           <View style={styles.Card3}>
               <Text style={styles.order}>Complete Order</Text>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('checkout') }>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('checkout')}>
               <Fa5Icon name="arrow-alt-circle-right" size={40} />
               </TouchableOpacity>
             </View>

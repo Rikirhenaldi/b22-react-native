@@ -43,6 +43,19 @@ export const getChatRoom = (token, recipient) => {
   };
 };
 
+export const deleteChatRoom = (token, recipient) => {
+  return async dispatch => {
+    const {data} = await http(token).delete(
+      `${BACKEND_URL}/chats/deletechats/?recipient=${recipient}`,
+    );
+    dispatch({
+      type: 'DELETE_CHATROOM',
+      payload: data.message,
+    });
+  };
+};
+
+
 export const sendMessage = (token, recipient, message) => {
   return async dispatch => {
     const form = new URLSearchParams();
@@ -59,6 +72,40 @@ export const sendMessage = (token, recipient, message) => {
   };
 };
 
+export const sendMessageWithImage = (token, recipient, message, img) => {
+  console.log("ini data di action", message, img);
+  return async dispatch => {
+    if(img !== null){
+      const form = new FormData();
+      form.append('img', {
+        uri: img,
+        name: 'sendingImage.jpg',
+        type: 'image/jpeg',
+      });
+      form.append('message', message);
+      const {data} = await http(token).post(
+        `${BACKEND_URL}/chats/sendimage/?recipient=${recipient}`,
+        form,
+      );
+      dispatch({
+        type: 'SEND_MESSAGE_IMG',
+        payload: data.message,
+      });
+    }else{
+      const form = new URLSearchParams();
+      form.append('recipient', recipient);
+      form.append('message', message);
+      const {data} = await http(token).post(
+        `${BACKEND_URL}/chats/sendmessage`,
+        form.toString(),
+      );
+      dispatch({
+        type: 'SEND_MESSAGE',
+        payload: data.message,
+      });
+    }
+  };
+};
 
 export const searchUsers = (search, token) => {
   if (!search.startsWith('http')){
@@ -85,3 +132,7 @@ export const searchUsers = (search, token) => {
     };
   }
 };
+
+export const clearMessage = () =>({
+  type: 'CLEAR_MESSAGE',
+});

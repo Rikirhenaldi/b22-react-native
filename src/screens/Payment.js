@@ -32,7 +32,10 @@ class Payment extends Component {
         showMessage({
           message: 'Payment Success',
           type: 'info',
+          duration: 1000,
+          backgroundColor: "#FFBA33"
         });
+        this.props.navigation.navigate('home')
       } else {
         hideMessage({
           message: 'Login Success',

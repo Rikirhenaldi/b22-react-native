@@ -3,7 +3,9 @@ import {BACKEND_URL} from '@env';
 
 export const getProfile = token => {
   return async dispatch => {
-    const {data} = await http(token).get(`${BACKEND_URL}/private/profile`);
+    const {data} = await http(token).get(
+      `${BACKEND_URL}/private/profilemobile`,
+    );
     dispatch({
       type: 'GET_PROFILE',
       payload: {

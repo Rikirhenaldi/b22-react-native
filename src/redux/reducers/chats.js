@@ -58,6 +58,24 @@ const chats = (state = initialState, action) => {
         sccMsg: action.payload,
       };
     }
+    case 'SEND_MESSAGE_IMG': {
+      return {
+        ...state,
+        sccMsg: action.payload,
+      };
+    }
+    case 'CLEAR_MESSAGE': {
+      return {
+        ...state,
+        sccMsg: "",
+      };
+    }
+    case 'DELETE_CHATROOM': {
+      return {
+        ...state,
+        deleteMsg: action.payload,
+      };
+    }
     default: {
       return {
         ...state,

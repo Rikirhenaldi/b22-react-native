@@ -48,7 +48,7 @@ class ChatList extends Component {
     const {token} = this.props.auth;
     await this.props.getProfile(token);
     const {user} = this.props.profile?.data;
-    this.setState({phoneNumber: user[0].phoneNumber});
+    this.setState({phoneNumber: user.phoneNumber});
     // socket.on(this.state.phoneNumber, data => {
     //   this.onGetChat(data.sender);;
     // })

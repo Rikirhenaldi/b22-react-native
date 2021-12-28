@@ -1,19 +1,38 @@
 /* eslint-disable prettier/prettier */
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import ButtonLogout from './ButtonLogout';
+import { connect } from 'react-redux';
+import { getProfile } from '../redux/actions/profile';
+import { authLogOut } from '../redux/actions/auth';
+
+
 const DrawerContent = ({descriptors, navigation}) => {
   const menuItem = Object.keys(descriptors);
   // const routeName = menuItem.map(item => item.split('-').slice(-1)[0])
   const renderMenu = menuItem.map(item => descriptors[item].options.title);
+  // const {data} = profile
+
+  // useEffect(() => {
+  //   if (auth.token !== null) {
+  //     getProfile(auth.token);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [auth.token]);
+
+  // const onLogout = () => {
+  //   authLogOut();
+  //   navigation.closeDrawer();
+  // };
+
   return (
     <View style={DrawerStyles.Parent}>
       <View style={DrawerStyles.User}>
         <TouchableOpacity onPress={() => navigation.navigate('user')}>
             <View style={DrawerStyles.imageWrapper} />
         </TouchableOpacity>
-        <Text style={DrawerStyles.UserText}>Zulaikha</Text>
-        <Text style={DrawerStyles.UserText2}>Zulaikha@gmail.com</Text>
+        <Text style={DrawerStyles.UserText} />
+        <Text style={DrawerStyles.UserText2}>satoru@gmail.com</Text>
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -88,4 +107,10 @@ const DrawerStyles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+// const mapStateToProps = state => ({
+//   profile: state.profile,
+//   auth: state.auth,
+// });
+// const mapDispatchToProps = {getProfile, authLogOut};
+// export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent);
 export default DrawerContent;
