@@ -1,9 +1,5 @@
 # b22-react-native -  MOBILE Coffee Shop
-![Image](src/assets/img/app1.png)
-![Image](src/assets/img/app2.png)
-![Image](src/assets/img/app3.png)
-![Image](src/assets/img/app4.png)
-![Image](src/assets/img/app5.png)
+<img src="https://user-images.githubusercontent.com/77678762/148505667-334d324f-8a33-4c86-9572-4f0db28806af.png" width="250" height="500" />  <img src="https://user-images.githubusercontent.com/77678762/148505363-5669862d-8a2b-416c-8892-5344278c8a91.png" width="250" height="500" />   <img src="https://user-images.githubusercontent.com/77678762/148505364-07ad08af-fdde-48bd-bc50-a56bd22e29e7.png" width="250" height="500" />     <img src="https://user-images.githubusercontent.com/77678762/148505366-22aa333c-b78d-4e56-8386-e0ce8443b8b6.png" width="250" height="500" />  
 
 ## About
 - Login
