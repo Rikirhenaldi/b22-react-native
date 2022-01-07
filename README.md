@@ -1,9 +1,9 @@
 # b22-react-native -  MOBILE Coffee Shop
-![Image](src/assets/img/app1.png){: height="36px" width="36px"}
-![Image](src/assets/img/app2.png){: height="36px" width="36px"}
-![Image](src/assets/img/app3.png){: height="36px" width="36px"}
-![Image](src/assets/img/app4.png){: height="36px" width="36px"}
-![Image](src/assets/img/app5.png){: height="36px" width="36px"}
+![Image](src/assets/img/app1.png | width=100)
+![Image](src/assets/img/app2.png | width=100)
+![Image](src/assets/img/app3.png | width=100)
+![Image](src/assets/img/app4.png | width=100)
+![Image](src/assets/img/app5.png | width=100)
 
 ## About
 - Login
