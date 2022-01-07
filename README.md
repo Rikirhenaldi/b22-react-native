@@ -1,5 +1,5 @@
 # b22-react-native -  MOBILE Coffee Shop
-![Image](src/assets/img/app1.png | width=100)
+![Image](src/assets/img/app1.png {width=40px height=400px})
 ![Image](src/assets/img/app2.png | width=100)
 ![Image](src/assets/img/app3.png | width=100)
 ![Image](src/assets/img/app4.png | width=100)
